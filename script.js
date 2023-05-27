@@ -16,6 +16,10 @@ ConsoleCanvas.width = audioCanvas.width
 statisticsCanvas.height = audioCanvas.height
 statisticsCanvas.width = audioCanvas.width     
 statisticsCanvasCtx.font = "20px serif";
+var vid = document.querySelector("body > video")
+if (vid){
+	vid.play().catch((e)=>{console.error(e)})
+}
 //console hook
 if (console.everything === undefined) {
     console.everything = [];
