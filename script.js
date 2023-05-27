@@ -18,7 +18,7 @@ statisticsCanvas.width = audioCanvas.width
 statisticsCanvasCtx.font = "20px serif";
 var vid = document.querySelector("body > video")
 if (vid){
-	vid.play().catch((e)=>{console.error(e)})
+	vid.play().then(()=>{console.log("Played")}).catch((e)=>{console.error(e)})
 }
 //console hook
 if (console.everything === undefined) {
