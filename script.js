@@ -128,8 +128,8 @@ if (gl === null) {
         for (let index_push = 0 ; index_push < audio_array_data.length; index_push++){
             graph_array.shift(0)
             graph_array.push(interpolate_audio_data(audio_array_data[index_push],income_data["data"][index_push],lerpscale))
-            UpdateLoopDrawGraphOPENGL()
         }
+        UpdateLoopDrawGraphOPENGL()
         audio_array_data =  income_data["data"]
         latency = parseInt((new Date().getTime() - income_data["tick"])*1000)/1000
         if(income_data["DelayBetweenRound"]){
@@ -138,7 +138,6 @@ if (gl === null) {
         for (let index_push = 0 ; index_push < audio_array_data.length; index_push++){
             graph_array.shift(0)
             graph_array.push(audio_array_data[index_push])
-            UpdateLoopDrawGraphOPENGL()
         }
         UpdateLoopDrawGraphOPENGL()
     }
