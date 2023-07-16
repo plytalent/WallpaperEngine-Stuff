@@ -71,11 +71,14 @@ function console_draw(){
     ConsoleCanvasCtx.clearRect(0, 0, ConsoleCanvas.width, ConsoleCanvas.height);
     let y = 60
     function draw(log_info){
-        if(log_info.type == "exception"){
+        /*if(log_info.type == "exception"){
             ConsoleCanvasCtx.fillText("["+log_info["timeStamp"]+"]["+log_info["type"] +":"+ log_info["value"].line + "]" + log_info["value"].error, 600,y); 
         }else{
             ConsoleCanvasCtx.fillText("["+log_info["timeStamp"]+"]["+log_info["type"] + "]" + log_info["value"], 600,y); 
-        }
+        }*/
+	if (log_info.type == "log"){
+	    ConsoleCanvasCtx.fillText("["+log_info["timeStamp"]+"]["+log_info["type"] + "]" + log_info["value"], 600,y); 
+	}
         y+=textsize
     }
     for(let log_index = 0;log_index < console.everything.length; log_index++){
