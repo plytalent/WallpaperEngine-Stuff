@@ -19,7 +19,7 @@ try{
                 lerpscale = parseFloat(properties.lerpscale.value);
             }
             if (properties.loglevel) {
-                display_log_level = properties.loglevel.value
+                display_log_level = parseFloat(properties.loglevel.value);
             }
             if (properties.graphprecision) {
                 graphprecision = parseFloat(properties.graphprecision.value);
@@ -127,18 +127,18 @@ function console_draw(){
     }
     let current_log = null
     let type_lookup = {
+        "log"              : 1,
+        "warn"             : 2,
+        "error"            : 3,
         "exception"        : 3,
         "promiseRejection" : 3,
-        "error"            : 3,
-        "debug"            : 4,
-        "warn"             : 2,
-        "log"              : 1
+        "debug"            : 4
     }
     for(let log_index = 0;log_index < console.everything.length; log_index++){
         current_log = console.everything[log_index]
         if (current_log){
             if (current_log.type){
-                if (display_log_level == type_lookup[current_log.type]){
+                if (type_lookup[current_log.type] <= display_log_level){
                     draw(current_log)
                 }
             }
