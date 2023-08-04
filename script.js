@@ -66,7 +66,7 @@ if (vid){
 }
 //console hook
 if (console.everything === undefined) {
-    console.original = console.log;
+    console.original_log = console.log;
     console.everything = [];
     function TS(){
         return (new Date).toLocaleString("sv") + "Z"
