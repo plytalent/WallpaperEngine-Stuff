@@ -66,6 +66,7 @@ if (vid){
 }
 //console hook
 if (console.everything === undefined) {
+    console.original = console.log;
     console.everything = [];
     function TS(){
         return (new Date).toLocaleString("sv") + "Z"
@@ -90,7 +91,7 @@ if (console.everything === undefined) {
         if(console.everything.length > 10){
             console.everything.shift(0)
         }
-    } 
+    }
     function hookLogType(logType) {
         const original= console[logType].bind(console)
         return function(){
@@ -141,7 +142,7 @@ function console_draw(){
                 if (type_lookup[current_log.type] <= display_log_level){
                     draw(current_log)
                 }else{
-                    console.debug(type_lookup[current_log.type], "<=", display_log_level)
+                    console.warn(type_lookup[current_log.type], "<=", display_log_level)
                 }
             }
         }
