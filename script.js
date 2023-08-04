@@ -140,6 +140,8 @@ function console_draw(){
             if (current_log.type){
                 if (type_lookup[current_log.type] <= display_log_level){
                     draw(current_log)
+                }else{
+                    console.debug(type_lookup[current_log.type], "<=", display_log_level)
                 }
             }
         }
