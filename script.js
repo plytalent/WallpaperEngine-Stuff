@@ -1,3 +1,47 @@
+var display_log_level = "debug"
+var lerpscale = 1
+var graphpoint = 4096
+var graphprecision = 32
+var Render_Delta = new Date().getMilliseconds()
+var latency = 0
+var External_Delay = 0
+var rate = 0
+var graph_array = []
+var color = [125/255, 100/255, 75/255]
+
+try{
+    window.wallpaperPropertyListener = {
+        applyUserProperties: function(properties) {
+            if (properties.barcolor) {
+                color= properties.barcolor.value.split(' ');
+            }
+            if (properties.lerpscale) {
+                lerpscale = parseFloat(properties.lerpscale.value);
+            }
+            if (properties.loglevel) {
+                display_log_level = properties.loglevel.value
+            }
+            if (properties.graphprecision) {
+                graphprecision = parseFloat(properties.graphprecision.value);
+            }
+            if (properties.graphpoint) {
+                graphpoint = parseFloat(properties.graphpoint.value);
+                if (graph_array.length > graphpoint){
+                    for (let _round=0;_round < (graph_array.length - graphpoint);_round++){
+                        graph_array.shift(0)
+                    }
+                }else if (graph_array.length < graphpoint){
+                    for (let _round=0;_round < (graphpoint - graph_array.length);_round++){
+                        graph_array.push(0)
+                    }
+                }
+            }
+        },
+    };
+}catch(e){
+    console.error(e)
+}
+
 let audio_array_data = []
 // Get the audio canvas once the page has loaded
 let audioCanvas = document.getElementById('AudioCanvas');
@@ -81,8 +125,24 @@ function console_draw(){
 	}
         y+=textsize
     }
+    let current_log = null
+    let type_lookup = {
+        "exception"        : "error",
+        "promiseRejection" : "error",
+        "warn"             : "warn",
+        "debug"            : "debug",
+        "log"              : "info",
+        "error"            : "error"
+    }
     for(let log_index = 0;log_index < console.everything.length; log_index++){
-        draw(console.everything[log_index])
+        current_log = console.everything[log_index]
+        if (current_log){
+            if (current_log.type){
+                if (display_log_level == type_lookup[current_log.type]){
+                    draw(current_log)
+                }
+            }
+        }
     }
 }
 setInterval(console_draw,1000)
@@ -92,40 +152,6 @@ if (gl === null) {
         "Unable to initialize WebGL. Your webview or machine may not support it."
     );
 }else{
-    var lerpscale = 1
-    var graphpoint = 4096
-    var graphprecision = 32
-    var Render_Delta = new Date().getMilliseconds()
-    var latency = 0
-    var External_Delay = 0
-    var rate = 0
-    var graph_array = []
-    var color = [125/255, 100/255, 75/255]
-    window.wallpaperPropertyListener = {
-        applyUserProperties: function(properties) {
-            if (properties.barcolor) {
-                color= properties.barcolor.value.split(' ');
-            }
-            if (properties.lerpscale) {
-                lerpscale = parseFloat(properties.lerpscale.value);
-            }
-            if (properties.graphprecision) {
-                graphprecision = parseFloat(properties.graphprecision.value);
-            }
-            if (properties.graphpoint) {
-                graphpoint = parseFloat(properties.graphpoint.value);
-                if (graph_array.length > graphpoint){
-                    for (let _round=0;_round < (graph_array.length - graphpoint);_round++){
-                        graph_array.shift(0)
-                    }
-                }else if (graph_array.length < graphpoint){
-                    for (let _round=0;_round < (graphpoint - graph_array.length);_round++){
-                        graph_array.push(0)
-                    }
-                }
-            }
-        },
-    };
     var datahandler = (d) => {
         income_data = JSON.parse(d)
         for (let index_push = 0 ; index_push < audio_array_data.length; index_push++){
