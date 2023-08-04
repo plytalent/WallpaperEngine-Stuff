@@ -198,7 +198,7 @@ if (gl === null) {
         } catch(e){
             //console.error("Error Throwed: " + e);
             buildin_audio_data = true
-            setTimeout(setup_websocket,1000,"ws://127.0.0.1:13254",handler)
+            //setTimeout(setup_websocket,1000,"ws://127.0.0.1:13254",handler)
         }
     }
     var websocket = null;
