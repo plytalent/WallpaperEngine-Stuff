@@ -127,12 +127,12 @@ function console_draw(){
     }
     let current_log = null
     let type_lookup = {
-        "exception"        : "error",
-        "promiseRejection" : "error",
-        "warn"             : "warn",
-        "debug"            : "debug",
-        "log"              : "info",
-        "error"            : "error"
+        "exception"        : 3,
+        "promiseRejection" : 3,
+        "error"            : 3,
+        "debug"            : 4,
+        "warn"             : 2,
+        "log"              : 1
     }
     for(let log_index = 0;log_index < console.everything.length; log_index++){
         current_log = console.everything[log_index]
@@ -193,7 +193,7 @@ if (gl === null) {
                 websocket.send(JSON.stringify({"Max_Height":audioCanvas.height, "Skip":graphprecision}))
             }, 5000)
         } catch(e){
-            //console.log("Error Throwed: " + e);
+            //console.error("Error Throwed: " + e);
             buildin_audio_data = true
             setTimeout(setup_websocket,1000,"ws://127.0.0.1:13254",handler)
         }
@@ -315,16 +315,16 @@ if (gl === null) {
             try{
                 websocket.send(JSON.stringify({"Max_Height":audioCanvas.height, "Skip":graphprecision}))
             }catch(e){
-                console.log("Error Throwed: " + e);
+                console.error("Error Throwed: " + e);
             }
         });
     }catch(e){
-        console.log("Error Throwed: ");
+        console.error("Error Throwed: ");
         let gen = ()=>{
             try{
                 websocket.send(JSON.stringify({"Max_Height":audioCanvas.height, "Skip":graphprecision}))
             }catch(e){
-                console.log("Error Throwed: " + e);
+                console.error("Error Throwed: " + e);
             }
         }
         setInterval(gen,(1/30)*1000)
