@@ -324,6 +324,6 @@ if (gl === null) {
             console.error("Error Throwed: " + e);
         }
     }
-    setInterval(gen,(1/60)*1000)
+    setTimeout(()=>{setInterval(gen,(1/30)*1000)},1000)
     setInterval(statistics_update,1000)
 }
