@@ -8,12 +8,15 @@ var External_Delay = 0
 var rate = 0
 var graph_array = []
 var color = [125/255, 100/255, 75/255]
-
+var disable_interpolation = true
 try{
     window.wallpaperPropertyListener = {
         applyUserProperties: function(properties) {
             if (properties.barcolor) {
                 color= properties.barcolor.value.split(' ');
+            }
+            if (properties.disable_interpolation) {
+                disable_interpolation = properties.disable_interpolation.value;
             }
             if (properties.lerpscale) {
                 lerpscale = parseFloat(properties.lerpscale.value);
@@ -157,11 +160,13 @@ if (gl === null) {
 }else{
     var datahandler = (d) => {
         income_data = JSON.parse(d)
-        for (let index_push = 0 ; index_push < audio_array_data.length; index_push++){
-            graph_array.shift(0)
-            graph_array.push(interpolate_audio_data(audio_array_data[index_push],income_data["data"][index_push],lerpscale))
+        if (!disable_interpolation){
+            for (let index_push = 0 ; index_push < audio_array_data.length; index_push++){
+                graph_array.shift(0)
+                graph_array.push(interpolate_audio_data(audio_array_data[index_push],income_data["data"][index_push],lerpscale))
+            }
+            UpdateLoopDrawGraphOPENGL()
         }
-        UpdateLoopDrawGraphOPENGL()
         audio_array_data =  income_data["data"]
         latency = parseInt((new Date().getTime() - income_data["tick"])*1000)/1000
         if(income_data["DelayBetweenRound"]){
@@ -312,25 +317,13 @@ if (gl === null) {
             graph_array.push(0)
         }
     }
-    try{
-        // Register the audio listener provided by Wallpaper Engine.
-        window.wallpaperRegisterAudioListener((d)=>{
-            try{
-                websocket.send(JSON.stringify({"Max_Height":audioCanvas.height, "Skip":graphprecision}))
-            }catch(e){
-                console.error("Error Throwed: " + e);
-            }
-        });
-    }catch(e){
-        console.error("Error Throwed: ");
-        let gen = ()=>{
-            try{
-                websocket.send(JSON.stringify({"Max_Height":audioCanvas.height, "Skip":graphprecision}))
-            }catch(e){
-                console.error("Error Throwed: " + e);
-            }
+    let gen = ()=>{
+        try{
+            websocket.send(JSON.stringify({"Max_Height":audioCanvas.height, "Skip":graphprecision}))
+        }catch(e){
+            console.error("Error Throwed: " + e);
         }
-        setInterval(gen,(1/30)*1000)
     }
+    setInterval(gen,(1/60)*1000)
     setInterval(statistics_update,1000)
 }
